@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="pilz_amr">
+  <xacro:macro name="psen_scan" params="prefix parent *origin ros_topic">
+    <link name="${prefix}_link" type="laser">
+      <visual>
+        <origin xyz="-0.02 0 0.092" rpy="0 3.14 0" />
+      </visual>
+      <collision>
+        <origin xyz="-0.02 0 0.092" rpy="0 3.14 0" />
+      </collision>
+    </link>
+    <joint name="${prefix}_joint" type="fixed">
+      <axis xyz="0 1 0" />
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}"/>
+      <child link="${prefix}_link"/>
+    </joint>
+  </xacro:macro>
+</robot>
