@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="pilz_fair_revpi">
+  <xacro:macro name="caster_wheel" params="name parent *origin">
+   	<link name="${name}_link" type="wheel">
+      <visual>
+    		<origin xyz="0 0 0" rpy="0 0 0" />
+    	</visual>
+    	<collision>
+      	<origin xyz="0 0 0" rpy="0 0 0" />
+    	</collision>
+    </link>
+		<joint name="${name}_joint" type="fixed">
+    	<xacro:insert_block name="origin" />
+    	<axis xyz="-1 0 0" />
+    	<joint_properties damping="1." friction="1.0" />
+    	<limit effort="1000.0" lower="-1e+16" upper="1e+16" velocity="3.5"/>
+    	<parent link="${parent}" />
+    	<child link="${name}_link" />
+  	</joint>
+  </xacro:macro>
+</robot>
