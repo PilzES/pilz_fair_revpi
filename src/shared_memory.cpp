@@ -6,12 +6,10 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <unistd.h>
-
 #include <chrono>
 #include <functional>
 #include <memory>
 #include <string>
-
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/twist.hpp"
 
@@ -24,8 +22,8 @@ struct DataExchangeRead {
 };
 
 struct DataExchangeWrite {
-  double linear_x;
-  double angular_z;
+  float linear_x;
+  float angular_z;
 };
 
 struct SyncDataExchange {
@@ -50,10 +48,8 @@ private:
   {
     try{
 
-      double lin_x = msg->linear.x;
-      double ang_z = msg->angular.z;
-
-      RCLCPP_INFO(get_logger(), "Received cmd_vel message: Linear X = %.2f, Angular Z = %.2f", lin_x, ang_z);
+      float lin_x = msg->linear.x;
+      float ang_z = msg->angular.z;
 
       struct SyncDataExchange *pSync;
       struct DataExchangeRead *pRead;
@@ -75,13 +71,13 @@ private:
 
       pSync->sync = 1;
 
-      pWrite->linear_x = 50.0;
-      pWrite->angular_z = 60.0;
+      pWrite->linear_x = lin_x;
+      pWrite->angular_z = ang_z;
 
+      pSync->sync = 0;
       munmap(pRead, sizeof(struct DataExchangeRead));
       munmap(pWrite, sizeof(struct DataExchangeWrite));
       munmap(pSync, sizeof(struct SyncDataExchange));
-      pSync->sync = 0;
       close(fdRead);
       close(fdWrite);
       close(fdSync);
